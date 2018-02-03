@@ -1,0 +1,10 @@
+div.sheet {
+    height: 100%;
+    background-color: green;
+}
+
+div.controls {
+    height: 100%;
+    background-color: orange;
+    padding: 10px 40px !important;
+}

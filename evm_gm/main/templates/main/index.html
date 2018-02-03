@@ -1,0 +1,70 @@
+{# Load the tag library #}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/main.css' %}" />
+<script src="{% static 'js/lib/jquery-3.3.1.min.js' %}"></script>
+<script>
+    var dataStr = "{{ data|safe }}";
+</script>
+{% csrf_token %}
+<script type="text/javascript">
+// using jQuery
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+</script>
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% load index %}
+
+<div>
+    <div class="col-md-4 sheet">
+        <h1>Left</h1>
+        <table class="table table-bordered">
+
+            <tbody>
+                {% for value in data.0 %}
+                <tr>
+                    <td>{{ data.0|index:forloop.counter0 }}</td>
+                    <td>{{ data.1|index:forloop.counter0 }}</td>
+                    <td>{{ data.2|index:forloop.counter0 }}</td>
+                    <td>{{ data.3|index:forloop.counter0 }}</td>                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8 controls">
+        <div class="inputs row">
+            <h1>System Inputs</h1>
+            <label for="pd">Project duration</label>
+            <input type="number" id="pd" value="18">
+            <label for="bac">Budget at Complete</label>
+            <input type="number" id="bac">
+            <br>
+            <label for="gm">Growth Model</label>
+            <input type="radio" name="gompertz" id="gm">Gompertz Model
+            <input type="radio" name="logistic" id="gm">Logistic Model
+            <br>
+            <label for="evaluation-point">Evaluation point (AT)</label>
+            <input type="text" id="evaluation-point" value="9"> 
+            <button class="btn btn-primary" id="btn-est-param">Parameters Estimate</button>
+            <br>
+            <h4>Estimated parameters</h4>
+            <label for="alpha">Alpha</label>
+            <input type="text" id="alpha">
+            <label for="beta">Beta</label>
+            <input type="text" id="beta">          
+            <br>
+            <label for="gamma">Gamma</label>
+            <input type="text" id="gamma">    
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/main/index.js' %}"></script>

@@ -24,9 +24,13 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
 <div>
     <div class="col-md-4 sheet">
-        <h1>Left</h1>
         <table class="table table-bordered">
-
+            <thead>
+                <td>AT</td>
+                <td>PV</td>
+                <td>EV</td>
+                <td>AC</td>                
+            </thead>
             <tbody>
                 {% for value in data.0 %}
                 <tr>
@@ -45,7 +49,7 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
             <label for="pd">Project duration</label>
             <input type="number" id="pd" value="18">
             <label for="bac">Budget at Complete</label>
-            <input type="number" id="bac">
+            <input type="number" id="bac" value="231.28">
             <br>
             <label for="gm">Growth Model</label>
             <input type="radio" name="gompertz" id="gm">Gompertz Model
@@ -62,7 +66,103 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
             <input type="text" id="beta">          
             <br>
             <label for="gamma">Gamma</label>
-            <input type="text" id="gamma">    
+            <input type="text" id="gamma">  
+            <label for="data-test">Gamma</label>
+            <br>
+            <h3>Test parameters</h3>
+            <input type="text" id="data-test" value="1">   
+            <button id="btn-test" class="btn">Test</button>  
+            <br>
+            <label for="result-test">Result Test</label>
+            <p id="result-test"></p>
+            <label for="right-result">Right Result</label>
+            <p id="right-result"></p>
+        </div>
+        <div class="predict-result row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>ES</td>
+                        <td>SPI</td>
+                        <td>CPI</td>
+                        <td>SPI(t)</td>
+                        <td>SCI</td>
+                        <td>SCI(t)</td>
+                        <td>TV</td>
+                        <td>ED</td>                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="ES"></td>
+                            <td id="SPI"></td>
+                            <td id="CPI"></td>
+                            <td id="SPIt"></td>
+                            <td id="SCI"></td>
+                            <td id="SCIt"></td>
+                            <td id="TV"></td>
+                            <td id="ED"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>EAC(t)PV1</td>
+                        <td>EAC(t)PV2</td>
+                        <td>EAC(t)PV3</td>
+                        <td>EAC(t)ED1</td>
+                        <td>EAC(t)ED2</td>
+                        <td>EAC(t)ED3</td>
+                        <td>EAC(t)ES1</td>
+                        <td>EAC(t)ES2</td>
+                        <td>EAC(t)ES3</td>                                                
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="EACtPV1"></td>
+                            <td id="EACtPV2"></td>
+                            <td id="EACtPV3"></td>
+                            <td id="EACtED1"></td>
+                            <td id="EACtED2"></td>
+                            <td id="EACtED3"></td>
+                            <td id="EACtES1"></td>
+                            <td id="EACtES2"></td>
+                            <td id="EACtES3"></td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>EAC1</td>
+                        <td>EAC2</td>
+                        <td>EAC3-SPI</td>
+                        <td>EAC3-SPI(t)</td>
+                        <td>EAC4-SCI</td>
+                        <td>EAC4-SCI(t)</td>
+                        <td>EAC5-CPI</td>
+                        <td>EAC5-CPI(t)</td>
+                        <td>EAC-GM1</td>
+                        <td>EAC-GM2</td>                                                                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="EAC1"></td>
+                            <td id="EAC2"></td>
+                            <td id="EAC3-SPI"></td>
+                            <td id="EAC3-SPIt"></td>
+                            <td id="EAC4-SCI"></td>
+                            <td id="EAC4-SCIt"></td>
+                            <td id="EAC5-CPI"></td>
+                            <td id="EAC5-CPIt"></td>
+                            <td id="EAC-GM1"></td>
+                            <td id="EAC-GM2"></td>                                                        
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

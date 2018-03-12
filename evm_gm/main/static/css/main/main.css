@@ -5,7 +5,20 @@ div.sheet {
 
 div.controls {
     height: 150%;
-    background-color: orange;
+    background-color: #ececec;
     padding: 10px 40px !important;
 }
 
+table thead td {
+    font-weight: 550;
+    font-size: 14px;
+}
+
+table td {
+    min-height: 37px;
+    height: 37px;    
+}
+
+.panel-body {
+    padding: 0!important;
+}

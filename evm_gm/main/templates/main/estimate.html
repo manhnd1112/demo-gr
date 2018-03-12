@@ -1,0 +1,221 @@
+{# Load the tag library #}
+{% load static %}
+{% load index %}
+<script>
+    var dataStr = "{{ data|safe }}";
+</script>
+<div>
+    <div class="col-md-3 sheet">
+        <h4 id="project_name">{{file_input_name}}</h4>    
+        <table class="table table-bordered">
+            <thead>
+                <td>AT</td>
+                <td>PV</td>
+                <td>EV</td>
+                <td>AC</td>                
+            </thead>
+            <tbody>
+                {% for value in data.0 %}
+                <tr>
+                    <td>{{ data.0|index:forloop.counter0 }}</td>
+                    <td>{{ data.1|index:forloop.counter0 }}</td>
+                    <td>{{ data.2|index:forloop.counter0 }}</td>
+                    <td>{{ data.3|index:forloop.counter0 }}</td>                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-9 controls">
+        <div class="inputs row">
+            <h1>System Inputs</h1>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="pd">Project Duration</label>     
+                </div>
+                <div class="col-md-9">
+                    <input type="number" id="pd" value="18">                        
+                </div>
+            </div>
+            <br><br>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="bac">Budget at Complete</label>     
+                </div>
+                <div class="col-md-9">
+                    <input type="number" id="bac" value="231.28">                        
+                </div>
+            </div>
+            <br><br>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="evaluation-point">Evaluation point (AT)</label>     
+                </div>
+                <div class="col-md-9">
+                    <input type="text" id="evaluation-point" value="9" disabled>
+                    <input type="radio" name="project_evaluate" value="0.25">25%
+                    <input type="radio" name="project_evaluate" value="0.5" checked>50%
+                    <input type="radio" name="project_evaluate" value="0.75">75%                         
+                </div>
+                
+            </div>
+            <br><br>            
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="gm">Growth Model</label>     
+                </div>
+                <div class="col-md-9">
+                    <input type="radio" name="grow-model" value="gompertz" id="gm" checked="checked">Gompertz Model
+                    <input type="radio" name="grow-model" value="logistic" id="lm">Logistic Model                        
+                    <input type="radio" name="grow-model" value="bass" id="lm">Bass Model                        
+                    <input type="radio" name="grow-model" value="weibull" id="lm">Weibull Model                        
+                </div>
+            </div>
+            <br>
+            <div class="col-md-12">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    <form action="{% url 'main:index' %}" method="POST"
+                    enctype="multipart/form-data" class="form upload-input">
+                        <div class="form-settings notes-form">
+                            {% csrf_token %}
+                            <input type="file" name="file" id="select-data-file" style="display: none">
+                            <a href="" class="btn btn-default btn-load-data">Loading data</a>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary" id="btn-est-param">Parameters Estimate</button>                    
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <h4><b>Estimated parameters</b></h4>    
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="alpha">Alpha</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="alpha">
+                </div>
+                <div class="col-md-3">
+                    <label for="beta">Beta</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="beta">
+                </div>
+            </div>          
+            &nbsp;
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <label for="gamma">Gamma</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="gamma">
+                </div>
+            </div>
+            <br>
+            <div class="Test" style="display: none">
+                <h3>Test parameters</h3>
+                <input type="text" id="data-test" value="1">   
+                <button id="btn-test" class="btn">Test</button>  
+                <br>
+                <label for="result-test">Result Test</label>
+                <p id="result-test"></p>
+                <label for="right-result">Right Result</label>
+                <p id="right-result"></p>
+            </div>
+        </div>
+        <br>
+        <div class="predict-result row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>ES</td>
+                        <td>SPI</td>
+                        <td>CPI</td>
+                        <td>SPI(t)</td>
+                        <td>SCI</td>
+                        <td>SCI(t)</td>
+                        <td>TV</td>
+                        <td>ED</td>                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="ES"></td>
+                            <td id="SPI"></td>
+                            <td id="CPI"></td>
+                            <td id="SPIt"></td>
+                            <td id="SCI"></td>
+                            <td id="SCIt"></td>
+                            <td id="TV"></td>
+                            <td id="ED"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>EAC(t)PV1</td>
+                        <td>EAC(t)PV2</td>
+                        <td>EAC(t)PV3</td>
+                        <td>EAC(t)ED1</td>
+                        <td>EAC(t)ED2</td>
+                        <td>EAC(t)ED3</td>
+                        <td>EAC(t)ES1</td>
+                        <td>EAC(t)ES2</td>
+                        <td>EAC(t)ES3</td>                                                
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="EACtPV1"></td>
+                            <td id="EACtPV2"></td>
+                            <td id="EACtPV3"></td>
+                            <td id="EACtED1"></td>
+                            <td id="EACtED2"></td>
+                            <td id="EACtED3"></td>
+                            <td id="EACtES1"></td>
+                            <td id="EACtES2"></td>
+                            <td id="EACtES3"></td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>EAC1</td>
+                        <td>EAC2</td>
+                        <td>EAC3-SPI</td>
+                        <td>EAC3-SPI(t)</td>
+                        <td>EAC4-SCI</td>
+                        <td>EAC4-SCI(t)</td>
+                        <td>EAC5-CI</td>
+                        <td>EAC5-CI(t)</td>
+                        <td>EAC-GM1</td>
+                        <td>EAC-GM2</td>                                                                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="EAC1"></td>
+                            <td id="EAC2"></td>
+                            <td id="EAC3-SPI"></td>
+                            <td id="EAC3-SPIt"></td>
+                            <td id="EAC4-SCI"></td>
+                            <td id="EAC4-SCIt"></td>
+                            <td id="EAC5-CI"></td>
+                            <td id="EAC5-CIt"></td>
+                            <td id="EAC-GM1"></td>
+                            <td id="EAC-GM2"></td>                                                        
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/main/index.js' %}"></script>

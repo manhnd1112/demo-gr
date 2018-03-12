@@ -10,14 +10,33 @@ $(document).ready(function(){
             }
         }
     });
-    
+    $('.form.upload-input .btn-load-data').click(function(e) {
+        e.preventDefault();
+        $('.form.upload-input input[type="file"]').click();
+    })
+
+    $('.form.upload-input input[type="file"]').change(function(){
+        $('.form.upload-input').submit();
+    })
+
+    $('input:radio[name="project_evaluate"]').change(function(){
+        var evaluation_time = parseFloat($(this).val());
+        var pd = parseInt($('#pd').val());
+        var evaluation_point = Math.round(evaluation_time*pd);
+        $('#evaluation-point').val(evaluation_point);
+    })
 });
 
+
+
 $('#btn-est-param').click(function(){
+    var project_name = $('#project_name').text();
     var pd = $('#pd').val();
     var budget = $('#bac').val();
     var evaluationPoint = $('#evaluation-point').val();
-    console.log(evaluationPoint);
+    var evaluation_percent = parseFloat($('input[name="project_evaluate"]:checked').val())*100;
+    var growModel = $('input[name=grow-model]:checked').val();
+    console.log(growModel);
     var data = JSON.parse(dataStr);
     var useData = [];
     useData[0] = data[0];
@@ -27,14 +46,20 @@ $('#btn-est-param').click(function(){
     useData[2] = data[2].slice(0, evaluationPoint).concat(data[1].slice(evaluationPoint, pd));
     // AC - PV
     useData[3] = data[3].slice(0, evaluationPoint).concat(data[1].slice(evaluationPoint, pd));
-    console.log(useData[3])
+    // AC
+    AC = data[3][data[3].length-1];
+    console.log(AC);
     $.ajax({
         url: 'ajax/test',
         data: {
+            'project_name': project_name,
             'data': JSON.stringify(useData),
             'pd': pd,
             'budget': budget,
-            'evaluationPoint': evaluationPoint
+            'evaluationPoint': evaluationPoint,
+            'evaluation_percent': evaluation_percent,
+            'growModel': growModel,
+            'AC': AC
         },
         method: 'GET',
         contentType: "application/json; charset=utf-8",
@@ -49,6 +74,7 @@ $('#btn-est-param').click(function(){
             $('#SPIt').text(data.SPIt);       
             $('#SCI').text(data.SCI);       
             $('#SCIt').text(data.SCIt);       
+            $('#TV').text(data.TV);       
             $('#ED').text(data.ED);       
             $('#EACtPV1').text(data.EACtPV1);
             $('#EACtPV2').text(data.EACtPV2);
@@ -58,7 +84,17 @@ $('#btn-est-param').click(function(){
             $('#EACtED3').text(data.EACtED3);
             $('#EACtES1').text(data.EACtES1);                        
             $('#EACtES2').text(data.EACtES2);                        
-            $('#EACtES3').text(data.EACtES3);                                    
+            $('#EACtES3').text(data.EACtES3);
+            $('#EAC1').text(data.EAC1);                                                
+            $('#EAC2').text(data.EAC2);                                                
+            $('#EAC3-SPI').text(data.EAC3_SPI);                                                
+            $('#EAC3-SPIt').text(data.EAC3_SPIt);    
+            $('#EAC4-SCI').text(data.EAC4_SCI);                                                            
+            $('#EAC4-SCIt').text(data.EAC4_SCIt);
+            $('#EAC5-CI').text(data.EAC5_CI);                                                            
+            $('#EAC5-CIt').text(data.EAC5_CIt);                                                                        
+            $('#EAC-GM1').text(data.EAC_GM1);                                                                        
+            $('#EAC-GM2').text(data.EAC_GM2);                                                                        
         }
     })
 })

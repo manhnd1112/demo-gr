@@ -2,21 +2,16 @@
 {# Load the tag library #}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main/main.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/bootstrap.min.css' %}" />
 <script src="{% static 'js/lib/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/lib/bootstrap.min.js' %}"></script>
 
 {% csrf_token %}
 <script type="text/javascript">
 // using jQuery
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 </script>
-{% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
 
 <div class="panel with-nav-tabs panel-default">
     <div class="panel-heading">

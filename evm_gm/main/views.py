@@ -68,6 +68,12 @@ class Funcs:
         y = parameters[2]
         return a * (1 - np.exp( -( xdata / y )**b ))
 
+    #log-logistic
+    def log_logistic_func(parameters,xdata):
+        a = parameters[0]
+        b = parameters[1]
+        return ( (xdata/a)**b ) / ( 1 + (xdata/a)**b )        
+
     #Compute residuals of y_predicted - y_observed    
     def residuals(parameters,x_data,y_observed,func):    
         return func(parameters,x_data) - y_observed
@@ -141,12 +147,15 @@ class Funcs:
             restBudget = (Funcs.logistic_func(parametersEstimated, index) - Funcs.logistic_func(parametersEstimated, xdata[evaluationPoint -1]))*BAC
         elif(growModel == 'bass'):
             restBudget = (Funcs.bass_func(parametersEstimated, index) - Funcs.bass_func(parametersEstimated, xdata[evaluationPoint -1]))*BAC
+        elif(growModel == 'log_logistic'):
+            restBudget = (Funcs.log_logistic_func(parametersEstimated, index) - Funcs.log_logistic_func(parametersEstimated, xdata[evaluationPoint -1]))*BAC
         else:
             restBudget = (Funcs.weibull_func(parametersEstimated, index) - Funcs.weibull_func(parametersEstimated, xdata[evaluationPoint -1]))*BAC            
         
         return round(AC_PV[evaluationPoint - 1] + restBudget, 2)
 
-    def optimizeLeastSquares(growModel, x0, xdata, ydata, method = 'dogbox'):
+    def optimizeLeastSquares(growModel, xdata, ydata, method = 'dogbox'):
+        x0 = [0.1, 0.2, 0.3] 
         print(growModel)
         if(growModel == 'gompertz'):
             OptimizeResult  = optimize.least_squares(Funcs.residuals,  x0,method = method,
@@ -157,6 +166,10 @@ class Funcs:
         elif(growModel == 'bass'):
             OptimizeResult  = optimize.least_squares(Funcs.residuals,  x0,method = method,
                                           args   = ( xdata, ydata,Funcs.bass_func) )
+        elif(growModel == 'log_logistic'):
+            x0 = [0.1, 0.2]
+            OptimizeResult  = optimize.least_squares(Funcs.residuals,  x0,method = method,
+                                          args   = ( xdata, ydata,Funcs.log_logistic_func) )
         else:
             OptimizeResult  = optimize.least_squares(Funcs.residuals,  x0,method = method,
                                           args   = ( xdata, ydata,Funcs.weibull_func) )
@@ -243,19 +256,18 @@ class Ajax:
         
         # print(xdata)
         # print(ydata)
-        x0 = [0.1, 0.2, 0.3] 
         lb = [0,0,0]
         ub = [2,2,2]
 
-        parametersEstimated = Funcs.optimizeLeastSquares(grow_model, x0, xdata, ydata)
+        parametersEstimated = Funcs.optimizeLeastSquares(grow_model, xdata, ydata)
         EAC_GM1 = Funcs.getEACGM(AC_PV, xdata, evaluationPoint, grow_model, parametersEstimated, budget, 1.0)
         EAC_GM2 = Funcs.getEACGM(AC_PV, xdata, evaluationPoint, grow_model, parametersEstimated, budget, 1.0/SPIt)
-        
+
         data = {
             'status': 'ok',
             'alpha': parametersEstimated[0],
             'beta': parametersEstimated[1],
-            'gamma': parametersEstimated[2],
+            'gamma': '',
             'ES': ES,
             'SPI': SPI,
             'CPI': CPI, 

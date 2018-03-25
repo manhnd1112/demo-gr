@@ -210,8 +210,8 @@ class Ajax:
         evaluationPoint = int(request.GET.get('evaluationPoint'))
         evaluation_percent = int(request.GET.get('evaluation_percent'))
         AC = float(request.GET.get('AC'))
-        print(project_name)
-        print(evaluation_percent)
+        # print(project_name)
+        # print(evaluation_percent)
 
         PV = data[1]
         EV_PV = data[2]
@@ -263,11 +263,19 @@ class Ajax:
         EAC_GM1 = Funcs.getEACGM(AC_PV, xdata, evaluationPoint, grow_model, parametersEstimated, budget, 1.0)
         EAC_GM2 = Funcs.getEACGM(AC_PV, xdata, evaluationPoint, grow_model, parametersEstimated, budget, 1.0/SPIt)
 
+        alpha = parametersEstimated[0]
+        beta = parametersEstimated[1]
+        if(grow_model == 'log_logistic'):
+            gamma = ''
+        else:
+            gamma = parametersEstimated[2]
+        
+
         data = {
             'status': 'ok',
-            'alpha': parametersEstimated[0],
-            'beta': parametersEstimated[1],
-            'gamma': '',
+            'alpha': alpha,
+            'beta': beta,
+            'gamma': gamma,
             'ES': ES,
             'SPI': SPI,
             'CPI': CPI, 
